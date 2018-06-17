@@ -108,22 +108,4 @@ public class RedisPoolUtil {
         return result;
     }
 
-
-    public static void main(String[] args) {
-        Jedis jedis = RedisPool.getJedis();
-        RedisPoolUtil.set("a", "bc");
-
-        String val = RedisPoolUtil.get("a");
-
-        RedisPoolUtil.setEx("b", "cd", 5000);
-
-        String val2 = RedisPoolUtil.get("b");
-
-        RedisPoolUtil.expire("a", 20);
-
-        RedisPoolUtil.del("b");
-
-        System.out.println(val);
-        System.out.println(val2);
-    }
 }

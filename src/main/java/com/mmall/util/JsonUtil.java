@@ -57,16 +57,54 @@ public class JsonUtil {
 
     }
 
+    public static <T> String obj2StringPretty(T obj) {
+        if (obj == null) {
+            return null;
+        }
 
-    public static void main(String[] args) {
-        Student student = new Student();
-        student.setId(1);
-        Student student2 = new Student();
-        student2.setId(1);
-        student2.setName("zhangsan");
-        String s1 = JsonUtil.obj2String(student);
-        String s2 = JsonUtil.obj2String(student2);
-        System.out.println(s1);
-        System.out.println(s2);
+        try {
+            return obj instanceof String ? (String) obj : objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
+        } catch (IOException e) {
+            log.warn("Parse Object to String error");
+            return null;
+        }
+    }
+
+    public static <T> T string2Obj(String str, Class<T> clazz) {
+        if (StringUtils.isEmpty(str) || clazz == null) {
+            return null;
+        }
+
+        try {
+            return clazz.equals(String.class) ? (T) str : objectMapper.readValue(str, clazz);
+        } catch (IOException e) {
+            log.warn("Parse String to Object error");
+            return null;
+        }
+    }
+
+
+    public static <T> T string2Obj(String str, TypeReference<T> typeReference) {
+        if (StringUtils.isEmpty(str) || typeReference == null) {
+            return null;
+        }
+
+        try {
+            return (T) (typeReference.getType().equals(String.class) ? str : objectMapper.readValue(str, typeReference));
+        } catch (IOException e) {
+            log.warn("Parse String to Object error");
+            return null;
+        }
+    }
+
+    public static <T> T string2Obj(String str, Class<?> collectionClass, Class<?>... elementClass) {
+        JavaType javaType = objectMapper.getTypeFactory().constructParametricType(collectionClass, elementClass);
+
+        try {
+            return objectMapper.readValue(str, javaType);
+        } catch (IOException e) {
+            log.warn("Parse String to Object error");
+            return null;
+        }
     }
 }

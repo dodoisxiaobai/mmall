@@ -17,6 +17,11 @@ public class Const {
 
     public static final String EMAIL = "email";
 
+    public interface RedisCache{
+
+        int REDIS_SESSION_EXTIME = 60 * 30;
+    }
+
     public interface Role {
         /**
          * 普通用户
